@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useMemo} from "react"
 import { useTable, usePagination, useSortBy } from "react-table"
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 import { USERS_COLUMNS } from "./columns"
@@ -71,18 +70,11 @@ const fetchUsersData = async (page, pageSize, pageFilter, pageSortBy) => {
     }
     try {
         const response = await axios.get(
-        `/organization/1/user?page=${page+1}&limit=${pageSize}${paramStr}`
+        `/users?page=${page+1}&limit=${pageSize}${paramStr}`
         );
         const results = response.data.data;
-        var finalResults = results;
-        if( results )  {
-            finalResults = results.map(item => ({
-                ...item,
-                name: `${item.first_name} ${item.last_name}` || "",
-            }))
-        }
         const data = {
-            results: finalResults,
+            results: results,
             count: response.data.total
         };
         return data;
